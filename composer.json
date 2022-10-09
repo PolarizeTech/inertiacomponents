@@ -1,0 +1,38 @@
+{
+  "name": "polarizetech/inertia",
+  "description": "Livewire-style components for Inertia Laravel",
+  "license": "MIT",
+  "authors": [
+      {
+          "name": "Joshua Anderton",
+          "email": "hey@joshuaanderton.ca"
+      }
+  ],
+  "require": {
+      "php": "^8.0",
+      "illuminate/support": "^8.67|^9.0"
+  },
+  "require-dev": {
+      "phpunit/phpunit": "^9.3"
+  },
+  "autoload": {
+      "psr-4": {
+          "PolarizeTech\\Inertia\\": "src"
+      }
+  },
+  "autoload-dev": {
+      "psr-4": {
+          "PolarizeTech\\Inertia\\Tests\\": "tests"
+      }
+  },
+  "config": {
+      "sort-packages": true
+  },
+  "extra": {
+      "laravel": {
+          "providers": [
+              "PolarizeTech\\Inertia\\Providers\\ServiceProvider"
+          ]
+      }
+  }
+}
