@@ -1,5 +1,5 @@
 {
-  "name": "polarizetech/inertia",
+  "name": "blazervel/inertia",
   "description": "Livewire-style components for Inertia Laravel",
   "license": "MIT",
   "authors": [
@@ -17,12 +17,12 @@
   },
   "autoload": {
       "psr-4": {
-          "PolarizeTech\\Inertia\\": "src"
+          "Blazervel\\Inertia\\": "src"
       }
   },
   "autoload-dev": {
       "psr-4": {
-          "PolarizeTech\\Inertia\\Tests\\": "tests"
+          "Blazervel\\Inertia\\Tests\\": "tests"
       }
   },
   "config": {
@@ -31,7 +31,7 @@
   "extra": {
       "laravel": {
           "providers": [
-              "PolarizeTech\\Inertia\\Providers\\ServiceProvider"
+              "Blazervel\\Inertia\\Providers\\ServiceProvider"
           ]
       }
   }

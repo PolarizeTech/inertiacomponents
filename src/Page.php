@@ -1,41 +1,160 @@
 <?php
 
-namespace PolarizeTech\Inertia;
+namespace Blazervel\Inertia;
 
-use Illuminate\Support\Str;
+use Blazervel\Inertia\Support\Page as InertiaPage;
 use Illuminate\Support\Collection;
-use Inertia\Inertia;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Inertia\Response;
+use ReflectionClass;
+use ReflectionMethod;
+use ReflectionProperty;
 
-class Page
+abstract class Page
 {
-    static function render(string $path, array $data = [], array $mergeData = [], string $rootView = null): Response
-    {
-        $pagePath = (new self)->translatePathAndAlias($path);
-        $data = array_merge($data, $mergeData);
+    protected Request $request;
 
-        if ($rootView) {
-            Inertia::rootView($rootView);
+    protected array $errors = [];
+
+    public function mount(Request $request): void
+    {
+        //
+    }
+
+    public function render(Request $request): Response
+    {
+        return $this->page();
+    }
+
+    public function __invoke(Request $request)
+    {
+        $this->request = $request;
+
+        if ($state = $this->request->state) {
+            $this->setState($state);
+        } else {
+            $this->mount($request);
         }
 
-        return Inertia::render(
-            $pagePath,
-            array_merge(
-                $data,
-                $mergeData
-            )
+        if ($action = $request->action) {
+            try {
+                $this->$action($request->data);
+            } catch(ValidationException $e) {
+                // 
+            }
+        }
+
+        return $this->render($request);
+    }
+
+    private function setState(array $state = []): void
+    {
+        $properties = $this->componentProperties();
+
+        (new Collection($properties))
+            ->map(fn ($property) => (
+                $this->$property = $state[$property]
+            ));
+    }
+
+    protected function rootView(): string|null
+    {
+        return $this->rootView ?? null;
+    }
+
+    protected function page(string $path = null, array $data = [])
+    {
+        return InertiaPage::render(
+            path:      $path ?: $this->componentName(),
+            data:      $this->data($data),
+            rootView:  $this->rootView(),
         );
     }
 
-    private function translatePathAndAlias(string $path): string
+    protected function validate(array $rules = [], array $data = null): array|ValidationException
     {
-        $alias = '@app';
-        $path  = Str::contains($path, '.') ? explode('.', $path) : explode('/', $path);
-        $path  = (new Collection($path));
-        $alias = $path->filter(fn ($p) =>  Str::startsWith($p, '@'))->first() ?: $alias;
-        $path  = $path->filter(fn ($p) => !Str::startsWith($p, '@'))->map(fn ($p) => Str::ucfirst(Str::camel($p)));
-        $path  = $path->join('/');
+        $data = $data ?: $this->request->data ?: [];
 
-        return "{$alias}/Pages/{$path}";
+        $validator = Validator::make($data, $rules);
+        
+        $this->errors = $validator->errors()->toArray();
+
+        $validator->validate();
+
+        return $data;
+    }
+
+    private function data(array $data = []): array
+    {
+        return array_merge(
+            $data,
+            $state = $this->componentState(),
+            $this->componentData(['state' => $state])
+        );
+    }
+
+    private function componentActions(): array
+    {
+        $childMethods  = new ReflectionClass(get_called_class());
+        $childMethods  = $childMethods->getMethods(ReflectionMethod::IS_PUBLIC);
+        $childMethods  = (new Collection($childMethods))->pluck('name')->all();
+        
+        $parentMethods = new ReflectionClass(Component::class);
+        $parentMethods = $parentMethods->getMethods(ReflectionMethod::IS_PUBLIC);
+        $parentMethods = (new Collection($parentMethods))->pluck('name')->all();
+
+        return (new Collection($childMethods))
+                    ->filter(fn ($action) => !in_array($action, $parentMethods))
+                    ->values()
+                    ->all();
+    }
+
+    private function componentProperties(): array
+    {
+        $childProperties  = new ReflectionClass(get_called_class());
+        $childProperties  = $childProperties->getProperties(ReflectionProperty::IS_PUBLIC);
+        $childProperties  = (new Collection($childProperties))->pluck('name')->all();
+        
+        $parentProperties = new ReflectionClass(Component::class);
+        $parentProperties = $parentProperties->getProperties(ReflectionProperty::IS_PUBLIC);
+        $parentProperties = (new Collection($parentProperties))->pluck('name')->all();
+
+        return (new Collection($childProperties))
+                    ->filter(fn ($property) => !in_array($property, $parentProperties))
+                    ->all();
+    }
+
+    private function componentState(): array
+    {
+        $properties = $this->componentProperties();
+
+        return (new Collection($properties))
+                    ->map(fn ($property) => [$property => $this->$property])
+                    ->collapse()
+                    ->all();
+    }
+
+    private function componentData(array $data = null): array
+    {
+        return ['component' => array_merge([
+            'name'    => $this->componentName(),
+            'route'   => "/{$this->request->path()}",
+            'actions' => $this->componentActions(),
+            'errors'  => $this->errors,
+        ], $data)];
+
+    }
+
+    private function componentName(): string
+    {
+        $name = get_called_class();
+        $name = Str::remove('App\\Http\\Inertia', $name);
+        $name = Str::replace('\\', ' ', $name);
+        $name = Str::snake($name, '.');
+
+        return $name;
     }
 }

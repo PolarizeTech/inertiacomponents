@@ -1,6 +1,6 @@
 <?php
 
-namespace PolarizeTech\Inertia;
+namespace Blazervel\Inertia\Support;
 
 use Closure;
 use Illuminate\Support\Facades\Route;

@@ -1,6 +1,6 @@
 <?php
 
-namespace PolarizeTech\Inertia\Providers;
+namespace Blazervel\Inertia\Providers;
 
 use Illuminate\Support\BaseServiceProvider;
 

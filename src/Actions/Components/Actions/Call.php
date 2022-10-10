@@ -1,6 +1,6 @@
 <?php
 
-namespace PolarizeTech\Inertia\Actions\Components;
+namespace Blazervel\Inertia\Actions\Components;
 
 use Illuminate\Http\Request;
 

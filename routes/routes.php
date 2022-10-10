@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use PolarizeTech\Inertia\Actions\Components;
+use Blazervel\Inertia\Actions\Components;
 
 
 Route::post('inertia-components/{component}/actions/{action}/call', Components\Call::class)
