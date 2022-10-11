@@ -2,62 +2,136 @@
 
 namespace Blazervel\Inertia;
 
-use Blazervel\Inertia\Support\Page as InertiaPage;
+use Blazervel\Inertia\Support\PageView;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Inertia\Response;
-use ReflectionClass;
-use ReflectionMethod;
-use ReflectionProperty;
 
 abstract class Page
 {
-    protected Request $request;
+    /**
+     * Component name (for looking up the component class when invoking action call)
+     */
+    public string $componentName;
+
+    /**
+     * Component route (for redirecting back to main component route)
+     */
+    public string $componentRoute;
 
     protected array $errors = [];
 
-    public function mount(Request $request): void
+    public function __invoke(Request $request)
     {
-        //
+        $this->componentRoute = "/{$request->path()}";
+        $this->componentName = $this->componentName();
+
+        if (
+            !$this->retrieveStateFromSession()
+            && method_exists($this->componentClass(), 'mount')
+        ) {
+            // Mount extended class
+            $this->mount($request);
+        }
+
+        return $this->render($request);
     }
+
+    public function call(string $action, array $parameters, Request $request)
+    {
+        $this->componentRoute = "/{$request->state['componentRoute']}";
+        $this->componentName = $this->componentName();
+
+        $this->retrieveStateFromRequest($request);
+
+        try {
+            if ($parameters !== null) {
+                $this->$action(
+                    ...$parameters
+                );
+            } else {
+                $this->$action();
+            }
+
+            // Store state before redirect
+            $this->storeStateToSession();
+
+        } catch(AuthorizationException $e) {
+            //
+        } catch(ValidationException $e) {
+            // 
+        }
+
+        return redirect()->to(
+            $this->componentRoute
+        );
+    }
+
+    protected function mount(Request $request): void {}
 
     public function render(Request $request): Response
     {
         return $this->page();
     }
 
-    public function __invoke(Request $request)
+    protected function page(string $path = null)
     {
-        $this->request = $request;
+        $componentState = $this->componentState();
 
-        if ($state = $this->request->state) {
-            $this->setState($state);
-        } else {
-            $this->mount($request);
-        }
+        $data = array_merge($componentState, ['component' => [
+            'state' => $componentState,
+            'actions' => PageView::componentActions($this->componentClass()),
+            'errors' => $this->errors,
+        ]]);
 
-        if ($action = $request->action) {
-            try {
-                $this->$action($request->data);
-            } catch(ValidationException $e) {
-                // 
-            }
-        }
-
-        return $this->render($request);
+        return PageView::render(
+            path:      $path ?: $this->componentName(),
+            data:      $data,
+            rootView:  $this->rootView(),
+        );
     }
 
-    private function setState(array $state = []): void
+    private function setState(array $state): void
     {
-        $properties = $this->componentProperties();
-
-        (new Collection($properties))
+        $this
+            ->componentProperties()
             ->map(fn ($property) => (
                 $this->$property = $state[$property]
             ));
+    }
+
+    private function retrieveStateFromRequest(Request $request)
+    {
+        if (!$state = $request->state) {
+            return false;
+        }
+
+        $this->setState($state);
+
+        return true;
+    }
+    
+    private function retrieveStateFromSession(): bool
+    {
+        if (!$state = session()->get("inertia-component#{$this->componentName}")) {
+            return false;
+        }
+
+        // Clear session state just incase
+        session()->flash("inertia-component#{$this->componentName}", null);
+
+        $this->setState($state);
+
+        return true;
+    }
+
+    private function storeStateToSession(): void
+    {
+        session()->flash("inertia-component#{$this->componentName}", $this->componentState());
     }
 
     protected function rootView(): string|null
@@ -65,96 +139,57 @@ abstract class Page
         return $this->rootView ?? null;
     }
 
-    protected function page(string $path = null, array $data = [])
+    protected function authorize(string $ability, ...$arguments): bool
     {
-        return InertiaPage::render(
-            path:      $path ?: $this->componentName(),
-            data:      $this->data($data),
-            rootView:  $this->rootView(),
-        );
+        Gate::authorize($ability, ...$arguments);
+
+        return true;
     }
 
-    protected function validate(array $rules = [], array $data = null): array|ValidationException
+    protected function validate(array $rules, array $data): array
     {
-        $data = $data ?: $this->request->data ?: [];
-
         $validator = Validator::make($data, $rules);
         
-        $this->errors = $validator->errors()->toArray();
-
-        $validator->validate();
+        if ($errors = $validator->errors()->toArray()) {
+            $this->errors = $errors;
+            $validator->validate();
+        }
 
         return $data;
     }
 
-    private function data(array $data = []): array
+    private function componentClass(): string
     {
-        return array_merge(
-            $data,
-            $state = $this->componentState(),
-            $this->componentData(['state' => $state])
-        );
-    }
-
-    private function componentActions(): array
-    {
-        $childMethods  = new ReflectionClass(get_called_class());
-        $childMethods  = $childMethods->getMethods(ReflectionMethod::IS_PUBLIC);
-        $childMethods  = (new Collection($childMethods))->pluck('name')->all();
-        
-        $parentMethods = new ReflectionClass(Component::class);
-        $parentMethods = $parentMethods->getMethods(ReflectionMethod::IS_PUBLIC);
-        $parentMethods = (new Collection($parentMethods))->pluck('name')->all();
-
-        return (new Collection($childMethods))
-                    ->filter(fn ($action) => !in_array($action, $parentMethods))
-                    ->values()
-                    ->all();
-    }
-
-    private function componentProperties(): array
-    {
-        $childProperties  = new ReflectionClass(get_called_class());
-        $childProperties  = $childProperties->getProperties(ReflectionProperty::IS_PUBLIC);
-        $childProperties  = (new Collection($childProperties))->pluck('name')->all();
-        
-        $parentProperties = new ReflectionClass(Component::class);
-        $parentProperties = $parentProperties->getProperties(ReflectionProperty::IS_PUBLIC);
-        $parentProperties = (new Collection($parentProperties))->pluck('name')->all();
-
-        return (new Collection($childProperties))
-                    ->filter(fn ($property) => !in_array($property, $parentProperties))
-                    ->all();
-    }
-
-    private function componentState(): array
-    {
-        $properties = $this->componentProperties();
-
-        return (new Collection($properties))
-                    ->map(fn ($property) => [$property => $this->$property])
-                    ->collapse()
-                    ->all();
-    }
-
-    private function componentData(array $data = null): array
-    {
-        return ['component' => array_merge([
-            'name'    => $this->componentName(),
-            'route'   => "/{$this->request->path()}",
-            'actions' => $this->componentActions(),
-            'errors'  => $this->errors,
-        ], $data)];
-
+        return get_called_class();
     }
 
     private function componentName(): string
     {
-        $name = get_called_class();
-        $name = Str::remove('App\\Http\\Inertia', $name);
-        $name = Str::replace('\\', ' ', $name);
-        $name = Str::snake($name, '.');
+        return PageView::componentName(
+            $this->componentClass()
+        );
+    }
 
-        return $name;
+    private function componentState(): array
+    {
+        return (
+            $this
+                ->componentProperties()
+                ->map(fn ($property) => [$property => $this->$property])
+                ->collapse()
+                ->all()
+        );
+    }
+
+    private function componentProperties(): Collection
+    {
+        $properties = PageView::componentProperties($this->componentClass(), [
+            'componentRoute',
+            'componentName'
+        ]);
+
+        return (
+            new Collection($properties)
+        );
     }
 }

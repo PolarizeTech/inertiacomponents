@@ -1,6 +1,6 @@
 {
   "name": "blazervel/inertia",
-  "description": "Livewire-style components for Inertia Laravel",
+  "description": "Livewire-style components for Laravel Inertia",
   "license": "MIT",
   "authors": [
       {
@@ -10,7 +10,8 @@
   ],
   "require": {
       "php": "^8.0",
-      "illuminate/support": "^8.67|^9.0"
+      "illuminate/support": "^8.67|^9.0",
+      "inertiajs/inertia-laravel": "^0.5.4"
   },
   "require-dev": {
       "phpunit/phpunit": "^9.3"

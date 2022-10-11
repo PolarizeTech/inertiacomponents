@@ -3,7 +3,8 @@
 namespace Blazervel\Inertia\Support;
 
 use Closure;
-use Illuminate\Support\Facades\Route;
+use Blazervel\Inertia\Support\PageView;
+use Illuminate\Support\Facades\Route as BaseRoute;
 use Illuminate\Support\Collection;
 use Illuminate\Routing\Route as RoutingRoute;
 
@@ -12,12 +13,12 @@ class Route
     public static function get(string $route, string|Closure $view, array $data = []): RoutingRoute
     {
         if (is_string($view)) {
-            $action = fn () => Page::render($view, $data);
+            $action = fn () => PageView::render($view, $data);
         } else {
             $action = $view;
         }
 
-        return Route::get($route, $action);
+        return BaseRoute::get($route, $action);
     }
 
     public static function define(array|string $routeViews, string|Closure $view, array $data = []): Collection|RoutingRoute
