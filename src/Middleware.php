@@ -58,13 +58,19 @@ class Middleware extends InertiaMiddleware
         );
     }
 
-    public static function authNavigation(): array
+    public static function authNavigation(Request $request): array
     {
         if (!class_exists('\\Blazervel\\Auth\\Providers\\ServiceProvider')) {
             return [];
         }
 
         return [
+            (array) new NavItem(
+                name:    'blazervel_auth::auth.my_profile',
+                icon:    'user fa-duotone',
+                route:   'auth.my-profile',
+                current: $request->routeIs('auth.my-profile'),
+            ),
             (array) new NavItem(
                 name:    'blazervel_auth::auth.logout',
                 route:   'auth.logout',
@@ -94,13 +100,7 @@ class Middleware extends InertiaMiddleware
                 name:    'blazervel_workspaces::users.users',
                 icon:    'users fa-duotone',
                 href:    route('workspaces.users.index', $workspace),
-                current: $request->routeIs('workspaces.users.*')
-            ),
-            (array) new NavItem(
-                name:    'blazervel_workspaces::users.my-profile',
-                icon:    'user fa-duotone',
-                href:    route('workspaces.users.edit', ['workspace' => $workspace, 'user' => $user]),
-                current: $request->is("workspaces/*/users/{$user->uuid}/edit"),
+                current: $request->routeIs('workspaces.users.*') && !$request->routeIs('workspaces.users.my-profile')
             ),
         ];
     }
