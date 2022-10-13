@@ -86,8 +86,9 @@ class Middleware extends InertiaMiddleware
             return [];
         }
 
-        $workspace = $workspaceModelClass::current();
-        $user = $request->user();
+        if (!$workspace = $workspaceModelClass::current()) {
+            return [];
+        }
 
         return [
             (array) new NavItem(
