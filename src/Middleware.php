@@ -21,46 +21,51 @@ class Middleware extends InertiaMiddleware
 
     public function share(Request $request): array
     {
-
         return array_merge(
+            
             parent::share($request), 
-            $this->workspacesShare($request),
+            
+            //$this->workspacesShare($request),
+
             [
-                'navigation' => $this->navigation($request),
-                'auth.user' => fn () => self::user($request),
+                'navigation' => fn () => static::navigation($request),
+
+                'auth.user' => fn () => static::user($request),
+
                 'alerts' => [
                     'success' => fn () => $request->session()->get('success'),
-                    'danger' => fn () => $request->session()->get('danger'),
+                    'danger'  => fn () => $request->session()->get('danger'),
                     'warning' => fn () => $request->session()->get('warning'),
                 ],
             ]
+
         );
     }
 
-    public function navigation(Request $request): array
+    public static function navigation(Request $request): array
     {
         return array_merge(
             [
-                new NavItem(
+                (array) new NavItem(
                     name:    'blazervel_inertia::navigation.home',
                     icon:    'home fa-duotone',
                     route:   'home',
                     routeIs: 'home',
                 ),
             ],
-            $this->workspaceNavigation($request),
-            $this->authNavigation($request)
+            static::workspaceNavigation($request),
+            static::authNavigation($request)
         );
     }
 
-    public function authNavigation(): array
+    public static function authNavigation(): array
     {
         if (!class_exists('\\Blazervel\\Auth\\Providers\\ServiceProvider')) {
             return [];
         }
 
         return [
-            new NavItem(
+            (array) new NavItem(
                 name:    'blazervel_auth::auth.logout',
                 route:   'auth.logout',
                 icon:    'arrow-right-from-bracket fa-duotone',
@@ -69,9 +74,9 @@ class Middleware extends InertiaMiddleware
         ];
     }
 
-    public function workspaceNavigation(Request $request): array
+    public static function workspaceNavigation(Request $request): array
     {
-        if (!$workspaceModelClass = $this->workspaceModelClass()) {
+        if (!$workspaceModelClass = static::workspaceModelClass()) {
             return [];
         }
 
@@ -79,28 +84,28 @@ class Middleware extends InertiaMiddleware
         $user = $request->user();
 
         return [
-            new NavItem(
+            (array) new NavItem(
                 name:    'blazervel_workspaces::workspaces.workspaces',
                 icon:    'building fa-duotone',
                 route:   'workspaces.index',
                 routeIs: 'workspaces.*',
             ),
-            new NavItem(
+            (array) new NavItem(
                 name:    'blazervel_workspaces::users.users',
                 icon:    'users fa-duotone',
-                route:    ['workspaces.users.index', $workspace],
+                route:   route('workspaces.users.index', $workspace),
                 routeIs: 'workspaces.users.*'
             ),
-            new NavItem(
+            (array) new NavItem(
                 name:    'blazervel_workspaces::users.my-profile',
                 icon:    'user fa-duotone',
-                route:    ['workspaces.users.edit', ['workspace' => $workspace, 'user' => $user]],
+                route:   route('workspaces.users.edit', ['workspace' => $workspace, 'user' => $user]),
                 current: $request->is("workspaces/*/users/{$user->uuid}/edit"),
             ),
         ];
     }
 
-    public function workspaceModelClass()
+    public static function workspaceModelClass()
     {
         $workspaceModelClass = '\\Blazervel\\Workspaces\\Models\\WorkspaceModel';
         $appWorkspaceModelClass = '\\App\\Models\\Workspace';
@@ -118,7 +123,7 @@ class Middleware extends InertiaMiddleware
 
     public function workspacesShare(Request $request): array
     {
-        if (!$workspaceModelClass = $this->workspaceModelClass()) {
+        if (!$workspaceModelClass = static::workspaceModelClass()) {
             return [];
         }
 
@@ -127,7 +132,7 @@ class Middleware extends InertiaMiddleware
             : [];
 
         return [
-            'currentWorkspace' => $workspaceModelClass::current(),
+            'workspace' => $workspaceModelClass::current(),
             'workspaces' => $userWorkspaces,
         ];
     }

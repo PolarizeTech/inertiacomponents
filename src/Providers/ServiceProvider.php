@@ -2,7 +2,6 @@
 
 namespace Blazervel\Inertia\Providers;
 
-use Illuminate\Foundation\Http\Kernel;
 use Blazervel\Inertia\Middleware as BlazervelInertiaMiddleware;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
@@ -16,11 +15,11 @@ class ServiceProvider extends BaseServiceProvider
         //
     }
 
-    public function boot(Kernel $kernel)
+    public function boot()
     {
         $this->loadRoutes();
         $this->loadTranslations();
-        $this->loadInertiaMiddleware($kernel);
+        $this->loadInertiaMiddleware();
     }
 
     private function loadRoutes()
@@ -38,18 +37,18 @@ class ServiceProvider extends BaseServiceProvider
         );
     }
 
-    private function loadInertiaMiddleware(Kernel $kernel): self
+    private function loadInertiaMiddleware(): self
     {
         $appInertiaMiddleware = 'App\Http\Middleware\HandleInertiaRequests';
 
-        $router = $this->app->make(Router::class);
-
-        $router->pushMiddlewareToGroup(
-            'web',
-            class_exists($appInertiaMiddleware)
+        $inertiaMiddleware = class_exists($appInertiaMiddleware)
             ? $appInertiaMiddleware
-            : BlazervelInertiaMiddleware::class
-        );
+            : BlazervelInertiaMiddleware::class;
+
+        $this
+            ->app
+            ->make(Router::class)
+            ->pushMiddlewareToGroup('web', $inertiaMiddleware);
 
         return $this;
     }
