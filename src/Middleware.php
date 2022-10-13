@@ -50,7 +50,7 @@ class Middleware extends InertiaMiddleware
                     name:    'blazervel_inertia::navigation.home',
                     icon:    'home fa-duotone',
                     route:   'home',
-                    routeIs: 'home',
+                    current: $request->routeIs('home')
                 ),
             ],
             static::workspaceNavigation($request),
