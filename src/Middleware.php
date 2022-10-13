@@ -40,42 +40,87 @@ class Middleware extends InertiaMiddleware
     public function navigation(Request $request): array
     {
         return array_merge(
-            $this->workspaceNavigation($request),
             [
                 new NavItem(
                     name:    'blazervel_inertia::navigation.home',
-                    icon:    'home',
+                    icon:    'home fa-duotone',
                     route:   'home',
                     routeIs: 'home',
                 ),
             ],
+            $this->workspaceNavigation($request),
+            $this->authNavigation($request)
         );
     }
 
-    public function workspaceNavigation(Request $request): array
+    public function authNavigation(): array
     {
+        if (!class_exists('\\Blazervel\\Auth\\Providers\\ServiceProvider')) {
+            return [];
+        }
+
         return [
             new NavItem(
-                name:    'blazervel_workspaces::workspaces.workspaces',
-                icon:    'building',
-                route:   'workspaces.index',
-                routeIs: 'workspaces.*',
+                name:    'blazervel_auth::auth.logout',
+                route:   'auth.logout',
+                icon:    'arrow-right-from-bracket fa-duotone',
+                current: false,
             ),
         ];
     }
 
-    public function workspacesShare(Request $request): array
+    public function workspaceNavigation(Request $request): array
+    {
+        if (!$workspaceModelClass = $this->workspaceModelClass()) {
+            return [];
+        }
+
+        $workspace = $workspaceModelClass::current();
+        $user = $request->user();
+
+        return [
+            new NavItem(
+                name:    'blazervel_workspaces::workspaces.workspaces',
+                icon:    'building fa-duotone',
+                route:   'workspaces.index',
+                routeIs: 'workspaces.*',
+            ),
+            new NavItem(
+                name:    'blazervel_workspaces::users.users',
+                icon:    'users fa-duotone',
+                route:    ['workspaces.users.index', $workspace],
+                routeIs: 'workspaces.users.*'
+            ),
+            new NavItem(
+                name:    'blazervel_workspaces::users.my-profile',
+                icon:    'user fa-duotone',
+                route:    ['workspaces.users.edit', ['workspace' => $workspace, 'user' => $user]],
+                current: $request->is("workspaces/*/users/{$user->uuid}/edit"),
+            ),
+        ];
+    }
+
+    public function workspaceModelClass()
     {
         $workspaceModelClass = '\\Blazervel\\Workspaces\\Models\\WorkspaceModel';
         $appWorkspaceModelClass = '\\App\\Models\\Workspace';
         
         if (!class_exists($workspaceModelClass)) {
-            return [];
+            return null;
         }
 
-        $workspaceModelClass = class_exists($appWorkspaceModelClass)
-            ? $appWorkspaceModelClass
-            : $workspaceModelClass;
+        return (
+            class_exists($appWorkspaceModelClass)
+                ? $appWorkspaceModelClass
+                : $workspaceModelClass
+        );
+    }
+
+    public function workspacesShare(Request $request): array
+    {
+        if (!$workspaceModelClass = $this->workspaceModelClass()) {
+            return [];
+        }
 
         $userWorkspaces = $request->user()
             ? $request->user()->workspaces()->get()
