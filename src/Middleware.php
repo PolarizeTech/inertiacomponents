@@ -93,13 +93,13 @@ class Middleware extends InertiaMiddleware
             (array) new NavItem(
                 name:    'blazervel_workspaces::users.users',
                 icon:    'users fa-duotone',
-                route:   route('workspaces.users.index', $workspace),
+                href:    route('workspaces.users.index', $workspace),
                 routeIs: 'workspaces.users.*'
             ),
             (array) new NavItem(
                 name:    'blazervel_workspaces::users.my-profile',
                 icon:    'user fa-duotone',
-                route:   route('workspaces.users.edit', ['workspace' => $workspace, 'user' => $user]),
+                href:    route('workspaces.users.edit', ['workspace' => $workspace, 'user' => $user]),
                 current: $request->is("workspaces/*/users/{$user->uuid}/edit"),
             ),
         ];
