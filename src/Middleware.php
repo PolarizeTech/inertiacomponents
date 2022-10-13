@@ -88,13 +88,13 @@ class Middleware extends InertiaMiddleware
                 name:    'blazervel_workspaces::workspaces.workspaces',
                 icon:    'building fa-duotone',
                 route:   'workspaces.index',
-                routeIs: 'workspaces.*',
+                current: $request->routeIs('workspaces.*')
             ),
             (array) new NavItem(
                 name:    'blazervel_workspaces::users.users',
                 icon:    'users fa-duotone',
                 href:    route('workspaces.users.index', $workspace),
-                routeIs: 'workspaces.users.*'
+                current: $request->routeIs('workspaces.users.*')
             ),
             (array) new NavItem(
                 name:    'blazervel_workspaces::users.my-profile',

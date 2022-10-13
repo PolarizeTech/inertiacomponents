@@ -18,7 +18,6 @@ class NavItem
     public function __construct(
         string $name,
         string $route = null,
-        string $routeIs = null,
         string $href = null,
         string $icon = null,
         bool $current = null
@@ -32,24 +31,12 @@ class NavItem
 
         $this->icon = $icon;
         
-        if ($href) {
-            $this->href = $href;
-        } elseif ($route) {
+        if ($route) {
             $this->href = route($route);
         } else {
-            $this->href = '';
-        }
-        
-        if ($current !== null) {
-            $this->current = $current;
-        } elseif ($routeIs) {
-            $this->current = request()->routeIs($routeIs);
-        } else {
-            $this->current = request()->is($this->href);
+            $this->href = $href;
         }
 
-        $this->current = $current !== null 
-            ? $current 
-            : request()->is($this->href);
+        $this->current = ! ! $current;
     }
 }
