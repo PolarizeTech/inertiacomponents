@@ -32,10 +32,12 @@ class NavItem
 
         $this->icon = $icon;
         
-        $this->href = $href;
-
-        if ($route) {
+        if ($href) {
+            $this->href = $href;
+        } elseif ($route) {
             $this->href = route($route);
+        } else {
+            $this->href = '';
         }
         
         if ($current !== null) {
