@@ -26,7 +26,7 @@ class Middleware extends InertiaMiddleware
             parent::share($request), 
             $this->workspacesShare($request),
             [
-                'navigation' => $this->navigation(),
+                'navigation' => $this->navigation($request),
                 'auth.user' => fn () => self::user($request),
                 'alerts' => [
                     'success' => fn () => $request->session()->get('success'),
