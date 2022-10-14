@@ -4,6 +4,7 @@ namespace Blazervel\Inertia\Support;
 
 use Closure;
 use Blazervel\Inertia\Support\PageView;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route as BaseRoute;
 use Illuminate\Support\Collection;
 use Illuminate\Routing\Route as RoutingRoute;
@@ -11,9 +12,17 @@ use Illuminate\Routing\Route as RoutingRoute;
 class Route
 {
     public static function get(string $route, string|Closure $view, array $data = []): RoutingRoute
-    {
+    {        
         if (is_string($view)) {
-            $action = fn () => PageView::render($view, $data);
+            $action = function (...$parameters) use ($view, $data) {
+
+                // $data = array_merge(
+                //     $parameters,
+                //     $data
+                // );
+
+                return PageView::render($view, ['user' => $data]);
+            };
         } else {
             $action = $view;
         }
