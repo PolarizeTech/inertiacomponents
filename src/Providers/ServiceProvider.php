@@ -2,8 +2,10 @@
 
 namespace Blazervel\Inertia\Providers;
 
-use Blazervel\Inertia\Middleware as BlazervelInertiaMiddleware;
-use Illuminate\Routing\Router;
+use Illuminate\Contracts\Http\Kernel;
+use App\Http\Middleware\HandleInertiaRequests;
+use Blazervel\Inertia\Http\Middleware\ShareInertiaData;
+use Blazervel\Inertia\Http\Middleware\HandleInertiaRequests as BlazervelHandleInertiaRequests;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class ServiceProvider extends BaseServiceProvider
@@ -17,9 +19,10 @@ class ServiceProvider extends BaseServiceProvider
 
     public function boot()
     {
-        $this->loadRoutes();
-        $this->loadTranslations();
-        $this->loadInertiaMiddleware();
+        $this
+            ->loadRoutes()
+            ->loadTranslations()
+            ->loadInertiaMiddleware();
     }
 
     private function loadRoutes()
@@ -27,6 +30,8 @@ class ServiceProvider extends BaseServiceProvider
         $this->loadRoutesFrom(
             "{$this->path}/routes/routes.php"
         );
+
+        return $this;
     }
 
     private function loadTranslations()
@@ -35,20 +40,26 @@ class ServiceProvider extends BaseServiceProvider
             "{$this->path}/lang",
             'blazervel_inertia'
         );
+
+        return $this;
     }
 
     private function loadInertiaMiddleware(): self
     {
-        $appInertiaMiddleware = 'App\Http\Middleware\HandleInertiaRequests';
-
-        $inertiaMiddleware = class_exists($appInertiaMiddleware)
-            ? $appInertiaMiddleware
-            : BlazervelInertiaMiddleware::class;
-
-        $this
-            ->app
-            ->make(Router::class)
-            ->pushMiddlewareToGroup('web', $inertiaMiddleware);
+        $kernel = $this->app->make(Kernel::class);
+        
+        if (class_exists(HandleInertiaRequests::class)) {
+            if (!in_array(HandleInertiaRequests::class, $kernel->getMiddlewareGroups()['web'])) {
+                $kernel->appendMiddlewareToGroup('web', HandleInertiaRequests::class);
+            }
+            $kernel->prependToMiddlewarePriority(HandleInertiaRequests::class);
+        } else {
+            $kernel->appendMiddlewareToGroup('web', BlazervelHandleInertiaRequests::class);
+            $kernel->appendToMiddlewarePriority(BlazervelHandleInertiaRequests::class);
+        }
+        
+        $kernel->appendMiddlewareToGroup('web', ShareInertiaData::class);
+        $kernel->appendToMiddlewarePriority(ShareInertiaData::class);
 
         return $this;
     }
