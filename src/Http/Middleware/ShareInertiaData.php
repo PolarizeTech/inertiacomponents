@@ -31,20 +31,16 @@ class ShareInertiaData
         }
 
         Inertia::share([
-            'flash' => fn () => [
+            'alerts' => fn () => [
                 'success' => $request->session()->get('success'),
                 'error'   => $request->session()->get('error'),
                 'warning' => $request->session()->get('warning'),
                 'message' => $request->session()->get('message'),
             ],
-            'blazervel' => function () use ($request, $navigation) {
-                return [
-                    'navigation' => array_merge(
-                        $navigation,
-                        static::authNavigation($request)
-                    ),
-                ];
-            }
+            'navigation' => fn () => array_merge(
+                $navigation,
+                static::authNavigation($request)
+            ),
         ]);
 
         return $next($request);

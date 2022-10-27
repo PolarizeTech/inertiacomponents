@@ -26,3 +26,6 @@ export const useComponent = () => {
     })
   )
 }
+
+export { default as lang } from './utils/lang'
+export { resolvePage } from './utils/pages'

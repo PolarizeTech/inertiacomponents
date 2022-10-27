@@ -11,7 +11,7 @@ class NavItem
 
     public string $href;
 
-    public string $icon;
+    public ?string $icon;
 
     public bool $current;
 

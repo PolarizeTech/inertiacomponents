@@ -62,7 +62,6 @@ class PageView
             '@app'                  => static::componentsNamespace(),
             '@blazervel/ui'         => 'Blazervel\\Ui\\Http\\Inertia',
             '@blazervel/inertia'    => 'Blazervel\\Inertia\\Http\\Inertia',
-            '@blazervel/products'   => 'Blazervel\\Products\\Http\\Inertia',
             '@blazervel/auth'       => 'Blazervel\\Auth\\Http\\Inertia',
             '@blazervel/workspaces' => 'Blazervel\\Workspaces\\Http\\Inertia',
         ][$alias];
