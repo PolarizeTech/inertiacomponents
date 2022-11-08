@@ -1,9 +1,9 @@
-import { createApp, h } from '@appModules/vue'
-import { createInertiaApp } from '@appModules/@inertiajs/inertia-vue3'
-import { InertiaProgress } from '@appModules/@inertiajs/progress'
+import { createApp, h } from '@pckg/vue'
+import { createInertiaApp } from '@pckg/@inertiajs/inertia-vue3'
+import { InertiaProgress } from '@pckg/@inertiajs/progress'
 import { resolvePage } from '../'
-import '@blazervel/ui/../css/app.css'
-import { ZiggyVue } from '@app/../../vendor/tightenco/ziggy/dist/vue.m'
+import '@blazervel-ui/../css/app.css'
+import { ZiggyVue } from '@/../../vendor/tightenco/ziggy/dist/vue.m'
 
 const appName = import.meta.env.VITE_APP_NAME || 'Blazervel'
 

@@ -2,7 +2,7 @@
 
 namespace Blazervel\Inertia\Http\Middleware;
 
-use Blazervel\Inertia\View\NavItem;
+use Blazervel\Ui\View\NavItem;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Http\Request;
 use Inertia\Inertia;

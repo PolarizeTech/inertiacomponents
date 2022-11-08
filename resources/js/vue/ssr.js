@@ -1,9 +1,9 @@
-import { createSSRApp, h } from '@appModules/vue';
-import { renderToString } from '@appModules/@vue/server-renderer';
-import { createInertiaApp } from '@appModules/@inertiajs/inertia-vue3';
-import createServer from '@appModules/@inertiajs/server';
-import { resolvePageComponent } from '@appModules/laravel-vite-plugin/inertia-helpers';
-import { ZiggyVue } from '@app/../../vendor/tightenco/ziggy/dist/vue.m';
+import { createSSRApp, h } from '@pckg/vue';
+import { renderToString } from '@pckg/@vue/server-renderer';
+import { createInertiaApp } from '@pckg/@inertiajs/inertia-vue3';
+import createServer from '@pckg/@inertiajs/server';
+import { resolvePageComponent } from '@pckg/laravel-vite-plugin/inertia-helpers';
+import { ZiggyVue } from '@/../../vendor/tightenco/ziggy/dist/vue.m';
 
 const appName = 'Laravel';
 

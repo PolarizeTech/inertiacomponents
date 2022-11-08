@@ -1,6 +1,6 @@
 
-import { Inertia } from '@appModules/@inertiajs/inertia'
-import { usePage } from '@appModules/@inertiajs/inertia-react'
+import { Inertia } from '@pckg/@inertiajs/inertia'
+import { usePage } from '@pckg/@inertiajs/inertia-react'
 
 export const useComponent = () => {
 

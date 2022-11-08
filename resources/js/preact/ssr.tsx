@@ -1,7 +1,7 @@
 import { resolvePage } from '../'
-import { ReactDOMServer } from '@appModules/preact-compat'
-import { createInertiaApp } from '@appModules/@inertiajs/inertia-react'
-import createServer from '@appModules/@inertiajs/server'
+import { ReactDOMServer } from '@pckg/preact-compat'
+import { createInertiaApp } from '@pckg/@inertiajs/inertia-react'
+import createServer from '@pckg/@inertiajs/server'
 import '../../css/app.css'
 
 const appName = import.meta.env.VITE_APP_NAME || 'Blazervel'

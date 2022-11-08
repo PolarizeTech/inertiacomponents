@@ -1,6 +1,6 @@
-import { render } from '@appModules/preact/compat'
-import { createInertiaApp } from '@appModules/@inertiajs/inertia-react'
-import { InertiaProgress } from '@appModules/@inertiajs/progress'
+import { render } from '@pckg/preact/compat'
+import { createInertiaApp } from '@pckg/@inertiajs/inertia-react'
+import { InertiaProgress } from '@pckg/@inertiajs/progress'
 import { resolvePage } from '../'
 import '../../css/app.css'
 

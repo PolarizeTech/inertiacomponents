@@ -1,5 +1,5 @@
-import { useForm } from '@appModules/@inertiajs/inertia-react'
-import { Icon, ValidationErrors } from '@blazervel/ui/components'
+import { useForm } from '@pckg/@inertiajs/inertia-react'
+import { Icon, ValidationErrors } from '@blazervel-ui/components'
 import { Link } from '.'
 
 export default function ({

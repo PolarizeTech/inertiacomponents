@@ -59,11 +59,8 @@ class PageView
         $path  = $path->join('\\');
 
         $basePath = [
-            '@app'                  => static::componentsNamespace(),
-            '@blazervel/ui'         => 'Blazervel\\Ui\\Http\\Inertia',
-            '@blazervel/inertia'    => 'Blazervel\\Inertia\\Http\\Inertia',
-            '@blazervel/auth'       => 'Blazervel\\Auth\\Http\\Inertia',
-            '@blazervel/workspaces' => 'Blazervel\\Workspaces\\Http\\Inertia',
+            '@app' => static::componentsNamespace(),
+            '@blazervel-ui' => 'Blazervel\\Ui\\Http\\Inertia',
         ][$alias];
 
         return "{$basePath}\\{$path}";

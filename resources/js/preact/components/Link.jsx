@@ -1,4 +1,4 @@
-import { Link } from '@appModules/@inertiajs/inertia-react'
+import { Link } from '@pckg/@inertiajs/inertia-react'
 
 export default function ({ href, children, target = null, external = false, ...props }) {
 
