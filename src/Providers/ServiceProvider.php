@@ -1,11 +1,11 @@
 <?php
 
-namespace Blazervel\Inertia\Providers;
+namespace Ja\Inertia\Providers;
 
 use Illuminate\Contracts\Http\Kernel;
 use App\Http\Middleware\HandleInertiaRequests;
-use Blazervel\Inertia\Http\Middleware\ShareInertiaData;
-use Blazervel\Inertia\Http\Middleware\HandleInertiaRequests as BlazervelHandleInertiaRequests;
+use Ja\Inertia\Http\Middleware\ShareInertiaData;
+use Ja\Inertia\Http\Middleware\HandleInertiaRequests as BlazervelHandleInertiaRequests;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class ServiceProvider extends BaseServiceProvider
@@ -38,7 +38,7 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->loadTranslationsFrom(
             "{$this->path}/lang",
-            'blazervel_inertia'
+            'ja_inertia'
         );
 
         return $this;

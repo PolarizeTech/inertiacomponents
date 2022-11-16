@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Blazervel\Inertia\Actions\Pages\Actions;
+use Ja\Inertia\Actions\Pages\Actions;
 
 
 Route::post('inertia-components/{component}/actions/{action}/call', Actions\Call::class)

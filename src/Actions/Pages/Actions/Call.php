@@ -1,8 +1,8 @@
 <?php
 
-namespace Blazervel\Inertia\Actions\Pages\Actions;
+namespace Ja\Inertia\Actions\Pages\Actions;
 
-use Blazervel\Inertia\Support\PageView;
+use Ja\Inertia\Support\PageView;
 use Illuminate\Http\Request;
 
 class Call

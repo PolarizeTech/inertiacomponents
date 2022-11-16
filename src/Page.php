@@ -1,8 +1,8 @@
 <?php
 
-namespace Blazervel\Inertia;
+namespace Ja\Inertia;
 
-use Blazervel\Inertia\Support\PageView;
+use Ja\Inertia\Support\PageView;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;

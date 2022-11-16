@@ -1,4 +1,4 @@
-import { resolvePage } from '../'
+import { resolvePage } from '.'
 import { ReactDOMServer } from '@pckg/preact-compat'
 import { createInertiaApp } from '@pckg/@inertiajs/inertia-react'
 import createServer from '@pckg/@inertiajs/server'

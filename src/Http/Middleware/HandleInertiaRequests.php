@@ -1,6 +1,6 @@
 <?php
 
-namespace Blazervel\Inertia\Http\Middleware;
+namespace Ja\Inertia\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;

@@ -1,8 +1,10 @@
 <?php
 
-namespace Blazervel\Inertia\Http\Middleware;
+namespace Ja\Inertia\Http\Middleware;
 
-use Blazervel\Ui\View\NavItem;
+use Ja\Inertia\View\NavItem;
+use Ja\Inertia\Actions\Config\App;
+
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,7 +13,7 @@ class ShareInertiaData
 {
     public function handle($request, $next)
     {
-        Inertia::setRootView('blazervel-ui::layouts.app');
+        Inertia::setRootView('ja-inertia::app');
         
         $navigation = null;
         
@@ -22,7 +24,7 @@ class ShareInertiaData
         if (!$navigation) {
             $navigation = [
                 (array) new NavItem(
-                    name:    'blazervel_inertia::navigation.home',
+                    name:    'js_inertia::navigation.home',
                     icon:    'home fa-duotone',
                     href:    '/',
                     current: $request->is('/')
@@ -31,16 +33,21 @@ class ShareInertiaData
         }
 
         Inertia::share([
+
             'alerts' => fn () => [
                 'success' => $request->session()->get('success'),
                 'error'   => $request->session()->get('error'),
                 'warning' => $request->session()->get('warning'),
                 'message' => $request->session()->get('message'),
             ],
-            'navigation' => fn () => array_merge(
-                $navigation,
-                static::authNavigation($request)
-            ),
+            
+            'jaInertia' => fn () => App::getConfig(),
+
+            // 'navigation' => fn () => array_merge(
+            //     $navigation,
+            //     static::authNavigation($request)
+            // ),
+
         ]);
 
         return $next($request);
@@ -48,19 +55,15 @@ class ShareInertiaData
 
     public static function authNavigation(Request $request): array
     {
-        if (!class_exists('\\Blazervel\\Auth\\Providers\\ServiceProvider')) {
-            return [];
-        }
-
         return [
             (array) new NavItem(
-                name:    'blazervel_auth::auth.my_profile',
+                name:    'ja-inertia::auth.my_profile',
                 icon:    'user fa-duotone',
                 route:   'auth.my-profile',
                 current: $request->routeIs('auth.my-profile'),
             ),
             (array) new NavItem(
-                name:    'blazervel_auth::auth.logout',
+                name:    'ja-inertia::auth.logout',
                 route:   'auth.logout',
                 icon:    'arrow-right-from-bracket fa-duotone',
                 current: false,

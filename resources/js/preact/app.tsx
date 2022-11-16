@@ -1,17 +1,22 @@
-import { render } from '@pckg/preact/compat'
+import { render } from '@pckg/preact'
+import _ from '@pckg/lodash'
 import { createInertiaApp } from '@pckg/@inertiajs/inertia-react'
 import { InertiaProgress } from '@pckg/@inertiajs/progress'
-import { resolvePage } from '../'
-import '../../css/app.css'
+import initTranslations from '../utils/translations'
+import initRoutes from '../utils/routes'
 
-const appName = import.meta.env.VITE_APP_NAME || 'Blazervel'
+import '@blazervel/../css/tailwind.css'
 
 createInertiaApp({
-  title: (title) => `${title} - ${appName}`,
-  resolve: (name) => resolvePage(name, 'jsx'),
-  setup({ el, App, props }) {
+  resolve: name => import(name),
+  setup: ({ el, App, props }) => {
+
+    initTranslations(_.get(props, 'initialPage.props.jaInertia.localization', null))
+    initRoutes(_.get(props, 'initialPage.props.jaInertia.routes', null))
+    
     return render(<App {...props} />, el)
-  },
+
+  }
 })
 
 InertiaProgress.init({ color: '#4B5563' })

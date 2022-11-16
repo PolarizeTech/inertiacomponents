@@ -1,9 +1,9 @@
 <?php
 
-namespace Blazervel\Inertia\Support;
+namespace Ja\Inertia\Support;
 
 use Closure;
-use Blazervel\Inertia\Support\PageView;
+use Ja\Inertia\Support\PageView;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route as BaseRoute;
 use Illuminate\Support\Collection;

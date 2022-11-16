@@ -1,11 +1,11 @@
 <?php
 
-namespace Blazervel\Inertia\Support;
+namespace Ja\Inertia\Support;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
-use Blazervel\Inertia\Page;
+use Ja\Inertia\Page;
 use ReflectionMethod;
 use ReflectionClass;
 use ReflectionProperty;

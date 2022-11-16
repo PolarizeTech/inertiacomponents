@@ -1,8 +1,7 @@
 <?php
 
-namespace Blazervel\Inertia\View;
+namespace Ja\Inertia\View;
 
-use Blazervel\Inertia\Exceptions\BlazervelInertiaException;
 use Illuminate\Support\Facades\Lang;
 
 class NavItem
