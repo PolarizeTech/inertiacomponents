@@ -60,13 +60,7 @@ export default function ({
     }
   }
 
-  const change = (event) => {
-    setData(
-      event.target.name,
-      event.target.type === 'checkbox'
-        ? event.target.checked
-        : event.target.value)
-  }
+  const change = (name, value) => setData(name, value)
 
   return (
     <FormTheme
