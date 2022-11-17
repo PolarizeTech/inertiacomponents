@@ -9,6 +9,6 @@ class HandleInertiaRequests extends Middleware
 {
     public function rootView(Request $request)
     {
-        return 'blazervel-ui::layouts.app';
+        return 'ja-inertia::app';
     }
 }

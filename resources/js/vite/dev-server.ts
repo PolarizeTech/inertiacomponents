@@ -13,6 +13,7 @@ export default (config: UserConfig, mode: string) => {
 	// Set HMR host
 	_set(config, 'server.hmr.host', hmrHost)
 
+
 	// Set dev server port & host
 	_set(config, 'server.port', port)
   _set(config, 'server.host', host)

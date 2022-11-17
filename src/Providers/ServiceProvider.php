@@ -21,6 +21,7 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this
             ->loadRoutes()
+            ->loadViews()
             ->loadTranslations()
             ->loadInertiaMiddleware();
     }
@@ -29,6 +30,16 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->loadRoutesFrom(
             "{$this->path}/routes/routes.php"
+        );
+
+        return $this;
+    }
+
+    private function loadViews(): self
+    {
+        $this->loadViewsFrom(
+            "{$this->path}/resources/views",
+            'ja-inertia'
         );
 
         return $this;

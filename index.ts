@@ -8,14 +8,14 @@ import {
   _merge
 } from './resources/js/vite'
 
-interface TallConfigProps {
+interface JaInertiaOptionsProps {
   tailwind: boolean|undefined
   progress?: {color: string}
 }
 
-export default (options: TallConfigProps) => ({
+export default (options: JaInertiaOptionsProps) => ({
 
-  name: 'tall',
+  name: 'ja-inertia',
   
   config: (config: UserConfig, { mode, command }: { mode: string, command: string }) => {
 
@@ -29,9 +29,9 @@ export default (options: TallConfigProps) => ({
       ])
     }
 
-    config.define = {
-      INERTIA_PROGRESS_OPTIONS: options.progress
-    }
+    config = _merge(config, 'define', {
+      JA_INERTIA_OPTIONS: options
+    })
   
     // Add default aliases (e.g. alias @ -> ./resources/js)
     config = aliasConfig(config, __dirname)

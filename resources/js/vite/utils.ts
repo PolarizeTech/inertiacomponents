@@ -53,7 +53,7 @@ export const _merge = (object: object, path: string, merge: object|Array<any>): 
 }
 
 export const _cascade = (object: object, fallback: any, ...paths: Array<string>): any => {
-  const hasPaths = paths.filter(path => _has(object, path))
+  const hasPaths = paths.filter(path => _has(object, path)).map(path => _.get(object, path))
 
   if (hasPaths.length === 0) {
     return fallback

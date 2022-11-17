@@ -5,9 +5,9 @@ import path from 'path'
 export default (config: {preserveSymlinks?: boolean} = {}, packagePath: string) => {
 	
   // Support symlinks for aliasing vendor packages
-	if (config.preserveSymlinks !== false) {
-		config.preserveSymlinks = true
-	}
+	// if (config.preserveSymlinks !== false) {
+	// 	config.preserveSymlinks = true
+	// }
 
   // Allow aliasing this package
   config = _merge(config, 'server.fs.allow', [

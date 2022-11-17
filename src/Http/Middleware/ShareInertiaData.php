@@ -17,7 +17,7 @@ class ShareInertiaData
         
         $navigation = null;
         
-        if (class_exists(HandleInertiaRequests::class)) {
+        if (method_exists(HandleInertiaRequests::class, 'navigation')) {
             $navigation = HandleInertiaRequests::navigation($request);
         }
 

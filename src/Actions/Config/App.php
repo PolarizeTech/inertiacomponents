@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Lang as BaseLang;
 use Illuminate\Support\Str;
 use Tightenco\Ziggy\Ziggy;
 
-class App extends Action
+class App
 {
     public static function getConfig()
     {
