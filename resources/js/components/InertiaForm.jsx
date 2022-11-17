@@ -22,7 +22,15 @@ export default function ({
 
   const { data, setData, post, put, delete: destroy, processing, progress, errors } = useForm(initialValues)
   
-  const submit = (e) => {
+  const clear = event => {
+    let clearValues = {}
+      
+    props.fields.map(field => clearValues[field.name] = null)
+
+    setData(clearValues)
+  }
+
+  const submit = e => {
     e.preventDefault()
 
     const options = {
@@ -30,23 +38,11 @@ export default function ({
     }
 
     if (clearOnSuccess === true) {
-      options.onSuccess = (event) => {
-        let clearValues = {}
-          
-        props.fields.map(field => clearValues[field.name] = null)
-
-        setData(clearValues)
-      }
+      options.onSuccess = clear
     }
 
     if (clearOnError === true) {
-      options.onSuccess = (event) => {
-        let clearValues = {}
-          
-        props.fields.map(field => clearValues[field.name] = null)
-        
-        setData(clearValues)
-      }
+      options.onSuccess = clear
     }
 
     if (typeof submitData === 'function') {
