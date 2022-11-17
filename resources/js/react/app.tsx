@@ -9,18 +9,17 @@ import '@ja-inertia/../css/tailwind.css'
 
 function resolvePage(name: string): any {
 
-  let components, page = null
+  let page = null
 
   // Check packages for components
-  components = import.meta.glob('@/Pages/**/*.*')
+  const project = import.meta.glob('@/Pages/**/*.*'),
+        blazervelUi = import.meta.glob('@vendor/blazervel/ui/**/resources/js/**/Pages/**/*.*'),
+        jaInertia = import.meta.glob('@vendor/blazervel/ui/**/resources/js/**/Pages/**/*.*')
 
-  const vendorComponents = import.meta.glob('@vendor/**/resources/js/**/Pages/**/*.*')
-
-  if (Object.keys(vendorComponents).length > 0) {
-    components = {
-      ...components,
-      ...vendorComponents
-    }
+  const components = {
+    ...project,
+    ...blazervelUi,
+    ...jaInertia
   }
 
   for (const path in components) {
