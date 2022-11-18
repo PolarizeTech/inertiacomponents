@@ -59,15 +59,15 @@ class ServiceProvider extends BaseServiceProvider
     {
         $kernel = $this->app->make(Kernel::class);
         
-        if (class_exists(HandleInertiaRequests::class)) {
-            if (!in_array(HandleInertiaRequests::class, $kernel->getMiddlewareGroups()['web'])) {
-                $kernel->appendMiddlewareToGroup('web', HandleInertiaRequests::class);
-            }
-            $kernel->prependToMiddlewarePriority(HandleInertiaRequests::class);
-        } else {
-            $kernel->appendMiddlewareToGroup('web', BlazervelHandleInertiaRequests::class);
-            $kernel->appendToMiddlewarePriority(BlazervelHandleInertiaRequests::class);
-        }
+        // if (class_exists(HandleInertiaRequests::class)) {
+        //     if (!in_array(HandleInertiaRequests::class, $kernel->getMiddlewareGroups()['web'])) {
+        //         $kernel->appendMiddlewareToGroup('web', HandleInertiaRequests::class);
+        //     }
+        //     $kernel->prependToMiddlewarePriority(HandleInertiaRequests::class);
+        // } else {
+        //     $kernel->appendMiddlewareToGroup('web', BlazervelHandleInertiaRequests::class);
+        //     $kernel->appendToMiddlewarePriority(BlazervelHandleInertiaRequests::class);
+        // }
         
         $kernel->appendMiddlewareToGroup('web', ShareInertiaData::class);
         $kernel->appendToMiddlewarePriority(ShareInertiaData::class);
