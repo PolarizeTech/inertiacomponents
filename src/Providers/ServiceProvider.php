@@ -3,6 +3,7 @@
 namespace Ja\Inertia\Providers;
 
 use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Support\Str;
 use App\Http\Middleware\HandleInertiaRequests;
 use Ja\Inertia\Http\Middleware\ShareInertiaData;
 use Ja\Inertia\Http\Middleware\HandleInertiaRequests as BlazervelHandleInertiaRequests;
@@ -29,7 +30,7 @@ class ServiceProvider extends BaseServiceProvider
     private function loadRoutes()
     {
         $this->loadRoutesFrom(
-            "{$this->path}/routes/routes.php"
+            $this->path('routes/routes.php')
         );
 
         return $this;
@@ -38,7 +39,7 @@ class ServiceProvider extends BaseServiceProvider
     private function loadViews(): self
     {
         $this->loadViewsFrom(
-            "{$this->path}/resources/views",
+            $this->path('resources/views'),
             'ja-inertia'
         );
 
@@ -48,7 +49,7 @@ class ServiceProvider extends BaseServiceProvider
     private function loadTranslations()
     {
         $this->loadTranslationsFrom(
-            "{$this->path}/lang",
+            $this->path('lang'),
             'ja_inertia'
         );
 
@@ -73,5 +74,13 @@ class ServiceProvider extends BaseServiceProvider
         $kernel->appendToMiddlewarePriority(ShareInertiaData::class);
 
         return $this;
+    }
+
+    private function path(string ...$path): string
+    {
+        return join('/', [
+            Str::remove('src/Providers', __DIR__),
+            ...$path
+        ]);
     }
 }
