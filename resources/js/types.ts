@@ -1,4 +1,4 @@
-export interface LocalizationConfigProps {
+export interface TranslationsConfigProps {
   translations: object
   locale: string
 }

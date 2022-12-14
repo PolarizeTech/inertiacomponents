@@ -1,12 +1,12 @@
-import { LocalizationConfigProps } from "../types"
+import { TranslationsConfigProps } from "../types"
 
-export default function (langConfig: LocalizationConfigProps) {
+export default function (langConfig: TranslationsConfigProps) {
   (window as any).lang = (
     key: string,
     replace: object = {},
     fallback: boolean = true,
     count: number|null = null,
-    config: LocalizationConfigProps
+    config: TranslationsConfigProps
   ) => (
     lang(key, replace, fallback, count, config || langConfig)
   )
@@ -17,7 +17,7 @@ function lang(
   replace: object = {},
   fallback: boolean = true,
   count: number|null = null,
-  config: LocalizationConfigProps
+  config: TranslationsConfigProps
 ) {
 
   const translations: object = config.translations,

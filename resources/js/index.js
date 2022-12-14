@@ -27,5 +27,5 @@ export const useComponent = () => {
   )
 }
 
-export { default as lang } from './utils/lang'
+export { default as lang } from './utils/translations'
 export { resolvePage } from './utils/pages'

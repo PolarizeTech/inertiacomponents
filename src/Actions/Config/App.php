@@ -13,7 +13,7 @@ class App
     public static function getConfig()
     {
         return \B::arr(
-            localization: [
+            translations: [
                 'locale' => app()->getLocale(),
                 'translations' => static::translations()
             ],

@@ -45,7 +45,7 @@ createInertiaApp({
   resolve: name => resolvePage(name),
   setup: ({ el, App, props }) => {
 
-    initTranslations(_.get(props, 'initialPage.props.jaInertia.localization', null))
+    initTranslations(_.get(props, 'initialPage.props.jaInertia.translations', null))
     initRoutes(_.get(props, 'initialPage.props.jaInertia.routes', null))
     
     return render(<App {...props} />, el)
