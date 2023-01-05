@@ -2,6 +2,7 @@
 
 namespace Ja\Inertia\Http\Middleware;
 
+use Illuminate\Support\Str;
 use Ja\Inertia\View\NavItem;
 use Ja\Inertia\Actions\Config\App;
 use Ja\Inertia\Inertia as JaInertia;

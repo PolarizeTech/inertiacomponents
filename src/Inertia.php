@@ -2,10 +2,7 @@
 
 namespace Ja\Inertia;
 
-use Laravel\Fortify\Fortify;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Lang;
-use Illuminate\Http\Request;
 
 class Inertia
 {
