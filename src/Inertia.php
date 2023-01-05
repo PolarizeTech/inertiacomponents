@@ -11,7 +11,7 @@ class Inertia
 {
     const translationsKey = 'ja_inertia';
 
-    protected static function lang(string $key): string
+    public static function lang(string $key): string
     {
         if (Lang::has($key) && !is_array($tr = Lang::get($key))) {
             return $tr;
