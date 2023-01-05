@@ -40,13 +40,8 @@ class ShareInertiaData
 
                 $userPermissions = $user->teamPermissions($team);
 
-                if (($userPermissions[0] ?? null) === '*') {
-                    return [
-                        'canAddTeamMembers' => true,
-                        'canRemoveTeamMembers' => true,
-                        'canUpdateTeam' => true,
-                        'canDeleteTeam' => false,
-                    ];
+                if ($user->id === $team->owner_id) {
+                    return config('jetstream.permissions', []);
                 }
 
                 return $userPermissions;
