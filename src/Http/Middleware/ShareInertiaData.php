@@ -15,33 +15,40 @@ class ShareInertiaData
     {
         Inertia::setRootView('ja-inertia::app');
         
-        $navigation = null;
-        
-        if (method_exists(HandleInertiaRequests::class, 'navigation')) {
-            $navigation = HandleInertiaRequests::navigation($request);
-        }
+        $user = $request->user();
+        $team = null;
 
-        if (!$navigation) {
-            $navigation = [
-                (array) new NavItem(
-                    name:    'js_inertia::navigation.home',
-                    icon:    'home fa-duotone',
-                    href:    '/',
-                    current: $request->is('/')
-                ),
-            ];
+        if ($user) {
+            $team = $user->currentTeam;
         }
 
         Inertia::share([
 
-            'alerts' => JaInertia::alerts($request),
+            'alerts' => static::alerts($request),
             
             'jaInertia' => fn () => App::getConfig(),
+            
+            'auth' => compact('user'),
 
-            // 'navigation' => fn () => array_merge(
-            //     $navigation,
-            //     static::authNavigation($request)
-            // ),
+            'team' => $team,
+
+            'teams' => fn () => $user ? $user->teams()->get() : null,
+
+            'permissions' => function () use ($user, $team) {
+
+                $userPermissions = $user->teamPermissions($team);
+
+                if (($userPermissions[0] ?? null) === '*') {
+                    return [
+                        'canAddTeamMembers' => true,
+                        'canRemoveTeamMembers' => true,
+                        'canUpdateTeam' => true,
+                        'canDeleteTeam' => false,
+                    ];
+                }
+
+                return $userPermissions;
+            }
 
         ]);
 
@@ -66,12 +73,54 @@ class ShareInertiaData
         ];
     }
 
-    public static function user(Request $request): array|null
+    protected static function alerts(Request $request): array
     {
-        if ($user = $request->user()) {
-            return $user->only('id', 'name');
+        $alerts = $request->session()->all()['_flash'];
+        $alerts = collect(array_merge($alerts['old'], $alerts['new']));
+
+        $statusKeys = [];
+
+        if (class_exists(Fortify::class)) {
+            $statusKeys['fortify'] = [
+                Fortify::PASSWORD_UPDATED,
+                Fortify::PROFILE_INFORMATION_UPDATED,
+                Fortify::RECOVERY_CODES_GENERATED,
+                Fortify::TWO_FACTOR_AUTHENTICATION_CONFIRMED,
+                Fortify::TWO_FACTOR_AUTHENTICATION_DISABLED,
+                Fortify::TWO_FACTOR_AUTHENTICATION_ENABLED,
+                Fortify::VERIFICATION_LINK_SENT,
+            ];
         }
 
-        return null;
+        $statusKeys = collect($statusKeys);
+
+        $translateStatusKey = function (string $statusKey) use ($statusKeys): string|null {
+            $providerKey = (
+                $statusKeys
+                    ->filter(fn ($keys) => in_array($statusKey, $keys))
+                    ->keys()
+                    ->first()
+            );
+
+            if (! $providerKey) {
+                return null;
+            }
+
+            return JaInertia::lang(
+                Str::replace('-', '_', "{$providerKey}.{$statusKey}")
+            );
+        };
+
+        return (
+            $alerts
+                ->map(fn ($type) => [$type => $request->session()->get($type)])
+                ->collapse()
+                ->map(fn ($message, $type) => (
+                    $type === 'status' && ($translation = $translateStatusKey($message))
+                      ? $translation
+                      : $message
+                ))
+                ->all()
+        );
     }
 }
