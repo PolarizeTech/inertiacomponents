@@ -4,7 +4,7 @@ namespace Ja\Inertia\Http\Middleware;
 
 use Ja\Inertia\View\NavItem;
 use Ja\Inertia\Actions\Config\App;
-
+use Ja\Inertia\Inertia as JaInertia;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -34,12 +34,7 @@ class ShareInertiaData
 
         Inertia::share([
 
-            'alerts' => fn () => [
-                'success' => $request->session()->get('success'),
-                'error'   => $request->session()->get('error'),
-                'warning' => $request->session()->get('warning'),
-                'message' => $request->session()->get('message'),
-            ],
+            'alerts' => JaInertia::alerts($request),
             
             'jaInertia' => fn () => App::getConfig(),
 

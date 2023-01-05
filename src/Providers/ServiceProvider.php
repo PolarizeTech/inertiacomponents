@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use App\Http\Middleware\HandleInertiaRequests;
 use Ja\Inertia\Http\Middleware\ShareInertiaData;
 use Ja\Inertia\Http\Middleware\HandleInertiaRequests as BlazervelHandleInertiaRequests;
+use Ja\Inertia\Inertia as JaInertia;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class ServiceProvider extends BaseServiceProvider
@@ -50,7 +51,7 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->loadTranslationsFrom(
             $this->path('lang'),
-            'ja_inertia'
+            JaInertia::translationsKey
         );
 
         return $this;
