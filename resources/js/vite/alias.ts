@@ -23,10 +23,10 @@ export default (config: UserConfig, packagePath: string) => {
 
   config.resolve.alias = {
     ...(config.resolve.alias || {}),
-    '@ja-inertia': path.resolve(`${packagePath}/resources/js`),
-    '@vendor':     path.resolve('./vendor'),
-    '@pckg':       path.resolve('./node_modules'),
-    '@':           path.resolve('./resources/js'),
+    '@ja-inertia':      path.resolve(`${packagePath}/resources/js`),
+    '@tightenco/ziggy': path.resolve('vendor/tightenco/ziggy/src/js'),
+    '@pckg':            path.resolve('./node_modules'),
+    '@':                path.resolve('./resources/js'),
   }
 
   return config;

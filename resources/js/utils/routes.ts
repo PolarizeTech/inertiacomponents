@@ -1,4 +1,4 @@
-import route from '@vendor/tightenco/ziggy/src/js'
+import route from '@tightenco/ziggy'
 
 export default function (config: object) {
   (window as any).route = (name: string, params: object, absolute: boolean) => (

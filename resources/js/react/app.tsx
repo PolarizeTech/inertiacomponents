@@ -13,12 +13,10 @@ function resolvePage(name: string): any {
 
   // Check packages for components
   const project = import.meta.glob('@/Pages/**/*.*'),
-        blazervelUi = import.meta.glob('@vendor/blazervel/ui/**/resources/js/**/Pages/**/*.*'),
-        jaInertia = import.meta.glob('@vendor/blazervel/ui/**/resources/js/**/Pages/**/*.*')
+        jaInertia = import.meta.glob('@ja-inertia/**/Pages/**/*.*')
 
   const components = {
     ...project,
-    ...blazervelUi,
     ...jaInertia
   }
 
