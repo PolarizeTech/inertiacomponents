@@ -5,7 +5,7 @@ namespace Ja\Inertia\Http\Middleware;
 use Ja\Inertia\View\NavItem;
 use Ja\Inertia\Actions\Config\App;
 use Ja\Inertia\Inertia as JaInertia;
-use App\Http\Middleware\HandleInertiaRequests;
+use Laravel\Fortify\Fortify;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
