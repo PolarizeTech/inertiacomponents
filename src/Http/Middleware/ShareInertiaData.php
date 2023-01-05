@@ -38,13 +38,20 @@ class ShareInertiaData
 
                 if (! $user) return [];
 
-                $userPermissions = $user->teamPermissions($team);
+                $allPermissions = config('jetstream.permissions', []);
 
                 if ($user->id === $team->owner_id) {
-                    return config('jetstream.permissions', []);
+                    $userPermissions = $allPermissions;
+                } else {
+                    $userPermissions = $user->teamPermissions($team);
                 }
 
-                return $userPermissions;
+                return (
+                    collect($allPermissions)
+                        ->map(fn ($permission) => [$permission => in_array($permission, $userPermissions)])
+                        ->collapse()
+                        ->all()
+                );
             }
 
         ]);
