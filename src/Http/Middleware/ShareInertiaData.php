@@ -36,6 +36,8 @@ class ShareInertiaData
 
             'permissions' => function () use ($user, $team) {
 
+                if (! $user) return [];
+
                 $userPermissions = $user->teamPermissions($team);
 
                 if (($userPermissions[0] ?? null) === '*') {
