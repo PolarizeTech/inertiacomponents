@@ -1,6 +1,6 @@
 {
   "name": "joshuaanderton/inertia",
-  "description": "Livewire-style components for Laravel Inertia",
+  "description": "Tools for making great SaaS apps with Inertia.js + Laravel",
   "license": "MIT",
   "authors": [
       {
