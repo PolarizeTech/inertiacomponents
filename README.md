@@ -1,3 +1,1 @@
-# Livewire-style components for Inertia Laravel
-
-Documentation coming soon...
+# Tools for making great SaaS apps with Inertia.js + Laravel
