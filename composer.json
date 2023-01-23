@@ -1,6 +1,6 @@
 {
   "name": "joshuaanderton/inertia",
-  "description": "Tools for making great SaaS apps with Inertia.js + Laravel",
+  "description": "Tools for making great SaaS apps with Laravel and Inertia.js (using React and TypeScript)",
   "license": "MIT",
   "authors": [
       {
