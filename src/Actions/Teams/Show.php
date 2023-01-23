@@ -11,7 +11,7 @@ class Show
 {
     public function __invoke(Request $request, Team $team)
     {
-        return Inertia::render('@ja-inertia/react/jetstream/Pages/Teams/Show', [
+        return Inertia::render('@ja-inertia/vendor/jetstream/Pages/Teams/Show', [
             'team' => fn () => static::setupTeam($team),
             'availableRoles' => fn () => [
                 ['key' => 'admin',  'name' => 'Admin',  'description' => 'Admins users can perform any action.'],

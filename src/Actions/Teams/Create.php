@@ -9,12 +9,11 @@ class Create
 {
     public function __invoke(Request $request)
     {
-        return Inertia::render('@ja-inertia/react/jetstream/Pages/Teams/Create', [
-            'auth' => fn () => [
-                'user' => [
-                    'teams' => $request->user()->teams()->get()
-                ]
-            ]
+        $user = $request->user();
+        $user = array_merge($user->toArray(), [
+            'profilePhotoUrl' => $user->profile_photo_Url
         ]);
+
+        return Inertia::render('@ja-inertia/vendor/jetstream/Pages/Teams/Create', compact('user'));
     }
 }

@@ -1,15 +1,9 @@
-import tailwindcss from 'tailwindcss'
-import { UserConfig } from 'vite'
-import {
-  aliasConfig,
-  devServerConfig,
-  _envIs,
-  _set,
-  _merge
-} from './resources/js/vite'
+import { UserConfig, searchForWorkspaceRoot } from 'vite'
+import path from 'path'
+import { _merge } from './resources/js/vite/utils'
+import devServerConfig from './resources/js/vite/dev-server'
 
 interface JaInertiaOptionsProps {
-  tailwind: boolean|undefined
   progress?: {color: string}
 }
 
@@ -23,18 +17,28 @@ export default (options: JaInertiaOptionsProps) => ({
       return config
     }
 
-    if (options.tailwind === true) {
-      config = _merge(config, 'plugins', [
-        tailwindcss()
-      ])
-    }
+    const packagePath = __dirname
 
     config = _merge(config, 'define', {
       JA_INERTIA_OPTIONS: options
     })
-  
-    // Add default aliases (e.g. alias @ -> ./resources/js)
-    config = aliasConfig(config, __dirname)
+      
+    // Support symlinks for aliasing vendor packages
+    config.preserveSymlinks = true
+
+    // Allow importing from this package
+    config = _merge(config, 'server.fs.allow', [
+      searchForWorkspaceRoot(process.cwd()),
+      path.resolve(`${packagePath}/resources/js`),
+    ])
+
+    config = _merge(config, 'resolve.alias', {
+      '@tightenco/ziggy': path.resolve('vendor/tightenco/ziggy/src/js'),
+      '@ja-inertia': path.resolve(`${packagePath}/resources/js`),
+      '@app': path.resolve('./resources/js'),
+      '@pckg': path.resolve('./node_modules'),
+      '~': path.resolve('./node_modules'),
+    })
 
     if (mode !== 'development') {
       return config

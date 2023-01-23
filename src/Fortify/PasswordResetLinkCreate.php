@@ -14,7 +14,7 @@ class PasswordResetLinkCreate
      */
     public function __invoke(): InertiaResponse
     {
-        return Inertia::render('@ja-inertia/react/jetstream/Pages/ForgotPassword', [
+        return Inertia::render('@ja-inertia/vendor/jetstream/Pages/ForgotPassword', [
             'status' => session('status'),
         ]);
     }

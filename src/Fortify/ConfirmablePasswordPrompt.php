@@ -14,6 +14,6 @@ class ConfirmablePasswordPrompt
      */
     public function __invoke(): InertiaResponse
     {
-        return Inertia::render('@ja-inertia/react/jetstream/Pages/ConfirmPassword');
+        return Inertia::render('@ja-inertia/vendor/jetstream/Pages/ConfirmPassword');
     }
 }

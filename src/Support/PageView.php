@@ -48,22 +48,13 @@ class PageView
 
     public static function pageComponentLookup(string $path): string
     {
-        // workspaces.index -> ./app/Http/Inertia/Workspaces/Index.php
-        // @blazervel_workspaces.workspaces.index -> ./vendor/.../src/Http/Inertia/Workspaces/Index.php
-        $path  = Str::contains($path, '.') ? Str::replace('.', '/', $path) : $path;
-        $alias = Str::startsWith($path, '@bazervel') ? '@blazervel/' . explode('/', Str::remove('@blazervel/', $path))[0] : '@app';
-        $path  = Str::remove($alias, $path);
-        $path  = explode('/', $path);
-        $path  = (new Collection($path));
-        $path  = $path->map(fn ($p) => Str::ucfirst(Str::camel($p)));
-        $path  = $path->join('\\');
+        $path = Str::contains($path, '.') ? Str::replace('.', '/', $path) : $path;
+        $path = explode('/', $path);
+        $path = (new Collection($path));
+        $path = $path->map(fn ($p) => Str::ucfirst(Str::camel($p)));
+        $path = $path->join('\\');
 
-        $basePath = [
-            '@app' => static::componentsNamespace(),
-            '@blazervel-ui' => 'Blazervel\\Ui\\Http\\Inertia',
-        ][$alias];
-
-        return "{$basePath}\\{$path}";
+        return static::componentsNamespace() . "\\{$path}";
     }
 
     public static function componentsDir()

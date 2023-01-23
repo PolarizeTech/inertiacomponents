@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Ja\Inertia\View\NavItem;
 use Ja\Inertia\Actions\Config\App;
 use Ja\Inertia\Inertia as JaInertia;
+use App\Http\Middleware\HandleInertiaRequests;
 use Laravel\Fortify\Fortify;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,7 +15,9 @@ class ShareInertiaData
 {
     public function handle($request, $next)
     {
-        Inertia::setRootView('ja-inertia::app');
+        if (! class_exists(HandleInertiaRequests::class)) {
+            Inertia::setRootView('ja-inertia::app');
+        }
         
         $user = $request->user();
         $team = null;
@@ -25,9 +28,12 @@ class ShareInertiaData
 
         Inertia::share([
 
-            'alerts' => static::alerts($request),
-            
-            'jaInertia' => fn () => App::getConfig(),
+            'jaInertia' => fn () => array_merge([],
+                App::getConfig(),
+                [
+                    'alerts' => static::alerts($request)
+                ]
+            ),
             
             'auth' => compact('user'),
 
@@ -41,7 +47,7 @@ class ShareInertiaData
 
                 $allPermissions = config('jetstream.permissions', []);
 
-                if ($user->id === $team->owner_id) {
+                if ($user->id === $team->user_id) {
                     $userPermissions = $allPermissions;
                 } else {
                     $userPermissions = $user->teamPermissions($team);
@@ -80,8 +86,10 @@ class ShareInertiaData
 
     protected static function alerts(Request $request): array
     {
-        $alerts = $request->session()->all()['_flash'];
-        $alerts = collect(array_merge($alerts['old'], $alerts['new']));
+        $alerts = collect();
+        if ($flash = $request->session()->all()['_flash'] ?? null) {
+            $alerts = collect(array_merge($flash['old'], $flash['new']));
+        }
 
         $statusKeys = [];
 

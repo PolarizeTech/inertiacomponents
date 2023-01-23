@@ -16,7 +16,7 @@ class NewPasswordCreate
      */
     public function __invoke(Request $request): InertiaResponse
     {
-        return Inertia::render('@ja-inertia/react/jetstream/Pages/ResetPassword', [
+        return Inertia::render('@ja-inertia/vendor/jetstream/Pages/ResetPassword', [
             'email' => $request->email,
             'token' => $request->route('token'),
         ]);

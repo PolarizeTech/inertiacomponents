@@ -39,7 +39,7 @@ class Show
             );
         }
 
-        return Inertia::render('@ja-inertia/react/jetstream/Pages/Profile/Show', compact('sessions', 'user', 'profilePhotoUrl'));
+        return Inertia::render('@ja-inertia/vendor/jetstream/Pages/Profile/Show', compact('sessions', 'user', 'profilePhotoUrl'));
     }
     
     protected function createAgent($session)

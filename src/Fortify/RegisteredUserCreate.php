@@ -9,6 +9,6 @@ class RegisteredUserCreate
 {
     public function __invoke(): InertiaResponse
     {
-        return Inertia::render('@ja-inertia/react/jetstream/Pages/Register');
+        return Inertia::render('@ja-inertia/vendor/jetstream/Pages/Register');
     }
 }

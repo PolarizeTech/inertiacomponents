@@ -12,13 +12,13 @@ class App
 {
     public static function getConfig()
     {
-        return \B::arr(
-            translations: [
+        return [
+            'translations' => [
                 'locale' => app()->getLocale(),
                 'translations' => static::translations()
             ],
-            routes: (new Ziggy)->toArray(),
-        );
+            'routes' => (new Ziggy)->toArray(),
+        ];
     }
 
     protected static function packageTranslations(string $path, string $prefix = null): array

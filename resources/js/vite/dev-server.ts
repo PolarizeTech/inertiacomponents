@@ -2,7 +2,7 @@ import { resolve } from 'path'
 import { UserConfig } from 'vite'
 import fs from 'fs'
 import { homedir } from 'os'
-import { _env, _set, _has, _cascade, _log } from './utils'
+import { _env, _set, _merge, _has, _cascade, _log } from './utils'
 
 export default (config: UserConfig, mode: string) => {
 
@@ -38,19 +38,17 @@ const httpsConfig = (config: UserConfig) => {
 
 	try {
 
-		const creds = {
+		config = _merge(config, 'server.https', {
 			key: fs.readFileSync(key),
 			cert: fs.readFileSync(cert),
-		}
-
-		config = _set(config, 'server.https', creds)
+		})
 
 	} catch {
 		// If the dev was hoping for https, then tell them what happened
 		// config.server.host was set in last step
 		if (config.server?.https === true) {
 			_log(
-				'{theme}[Blazervel]',
+				'{theme}[joshuaanderton/inertia]',
 				`No key/cert at {green}${valetDefaultCredsPath}`,
 				`Have you run {blue}{underline}'valet secure'{theme} yet? 🤔`
 			)

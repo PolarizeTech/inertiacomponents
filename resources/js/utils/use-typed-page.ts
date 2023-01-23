@@ -1,6 +1,5 @@
-import { Page } from '@pckg/@inertiajs/inertia';
-import { usePage } from '@pckg/@inertiajs/inertia-react';
-import { InertiaSharedProps } from '@ja-inertia/react/jetstream/types';
+import { usePage } from '@pckg/@inertiajs/react';
+import { InertiaSharedProps } from '@ja-inertia/types';
 
 export default function useTypedPage<T = {}>() {
   return usePage<Page<InertiaSharedProps<T>>>();
