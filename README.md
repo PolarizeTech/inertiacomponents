@@ -1,4 +1,4 @@
-## Tools for making great SaaS apps with Inertia.js, React, and Laravel
+## Tools for making great SaaS apps with Laravel and Inertia.js (using React and TypeScript)
 
 ```
 composer require joshuaanderton/inertia
