@@ -1,12 +1,12 @@
-import React from 'react';
-import APITokenManager from '@ja-inertia/vendor/jetstream/Pages/API/Partials/APITokenManager';
-import AppLayout from '@ja-inertia/vendor/jetstream/components/layouts/AppLayout';
-import { ApiToken } from '@ja-inertia/types';
+import React from 'react'
+import APITokenManager from '@ja-inertia/vendor/jetstream/Pages/API/Partials/APITokenManager'
+import { ApiToken } from '@ja-inertia/types'
+import { AppLayout } from '@ja-inertia/components'
 
 interface Props {
-  tokens: ApiToken[];
-  availablePermissions: string[];
-  defaultPermissions: string[];
+  tokens: ApiToken[]
+  availablePermissions: string[]
+  defaultPermissions: string[]
 }
 
 export default function ApiTokenIndex({
@@ -26,5 +26,5 @@ export default function ApiTokenIndex({
         </div>
       </div>
     </AppLayout>
-  );
+  )
 }

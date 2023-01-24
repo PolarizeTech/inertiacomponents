@@ -51,7 +51,18 @@ export default function ({
     props.fields.map(field => initialValues[field.name] = field.value || null)
   }
 
-  const { data, setData, post, put, delete: destroy, processing, progress, errors } = useForm(initialValues)
+  const {
+    data,
+    setData,
+    post,
+    put,
+    delete: destroy,
+    processing,
+    progress,
+    errors,
+    reset,
+    clearErrors
+  } = useForm(initialValues)
   
   const clear = event => {
     let clearValues = {}
@@ -72,8 +83,8 @@ export default function ({
       options.onSuccess = clear
     }
 
-    if (clearOnError === true) {
-      options.onSuccess = clear
+    if (clearOnError === true && errors) {
+      reset()
     }
 
     if (typeof submitData === 'function') {
@@ -91,7 +102,10 @@ export default function ({
     }
   }
 
-  const change = (name, value) => setData(name, value)
+  const change = (name, value) => {
+    clearErrors(name)
+    setData(name, value)
+  }
 
   return (
     <FormTheme
@@ -255,21 +269,19 @@ export const FormTheme = ({
           )
         })}
 
-        {Array.isArray(children) && children.filter(child => !!child).length > 0 && (
-          <div>{children}</div>
-        )}
-
-        {submitButton !== false && (
-          <div className="flex justify-end">
-            {typeof submitButton === 'function' ? (
-              submitButton()
-            ) : (
-              <ButtonPrimary type="submit" className="ml-4" disabled={processing} text="Submit" />
-            )}
-          </div>
-        )}
-
+        {children}
+      
       </div>
+
+      {submitButton !== false && (
+        <div className="mt-6 flex justify-end">
+          {typeof submitButton === 'function' ? (
+            submitButton()
+          ) : (
+            <ButtonPrimary type="submit" className="ml-4" disabled={processing} text="Submit" />
+          )}
+        </div>
+      )}
 
     </form>
   )
