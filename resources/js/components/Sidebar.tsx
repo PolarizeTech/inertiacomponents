@@ -89,18 +89,9 @@ export default ({
       <div className="md:pl-64 flex flex-col flex-1">
 
         <div className="sticky top-0 ml-auto z-10 md:hidden pr-2 pt-2 sm:pl-3 sm:pt-3">
-          <button
-            type="button"
-            className="h-10 w-10 inline-flex items-center justify-center rounded-md text-chrome-500 hover:text-chrome-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-theme-200 bg-chrome-100 dark:bg-chrome-800"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-          >
-            <span className="sr-only">Open sidebar</span>
-            {!sidebarOpen ? (
-              <Icon name="bars" lg className="text-chrome-900" />
-            ) : (
-              <Icon name="times" lg className="text-chrome-900" />
-            )}
-          </button>
+          <Button onClick={() => setSidebarOpen(!sidebarOpen)} className="!p-2">
+            <Icon name={sidebarOpen ? 'x-mark' : 'bars-3'} lg />
+          </Button>
         </div>
 
         <main className="flex-1">
