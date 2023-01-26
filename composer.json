@@ -10,8 +10,7 @@
   ],
   "require": {
       "php": "^8.0",
-      "illuminate/support": "^8.67|^9.0",
-      "blazervel/ui": "dev-master"
+      "illuminate/support": "^8.67|^9.0"
   },
   "require-dev": {
       "phpunit/phpunit": "^9.3"

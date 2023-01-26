@@ -43,24 +43,25 @@ class App
             path: lang_path(),
             prefix: null
         );
+        $packages = [
+            //'blazervel' => 'blazervel/blazervel'
+        ];
 
-        $packageTranslations = collect([
-            'blazervel'            => 'blazervel/blazervel',
-            'blazervel_ui'         => 'blazervel/ui',
-            'blazervel_workspaces' => 'blazervel/workspaces',
-        ])
-        ->map(function ($package, $packagePrefix) {
-            if (!File::exists($packageLangPath = base_path("vendor/{$package}/lang"))) {
-                return null;
-            }
+        $packageTranslations = (
+            collect($packages)
+                ->map(function ($package, $packagePrefix) {
+                    if (!File::exists($packageLangPath = base_path("vendor/{$package}/lang"))) {
+                        return null;
+                    }
 
-            return static::packageTranslations(
-                path: $packageLangPath,
-                prefix: $packagePrefix
-            );
-        })
-        ->collapse()
-        ->whereNotNull();
+                    return static::packageTranslations(
+                        path: $packageLangPath,
+                        prefix: $packagePrefix
+                    );
+                })
+                ->collapse()
+                ->whereNotNull()
+        );
 
         return $packageTranslations
                   ->merge($translations)
