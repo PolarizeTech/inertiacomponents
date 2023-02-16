@@ -1,5 +1,5 @@
 {
-  "name": "joshuaanderton/inertia",
+  "name": "joshuaanderton/inertiakit",
   "description": "Tools for making great SaaS apps with Laravel and Inertia.js (using React and TypeScript)",
   "license": "MIT",
   "authors": [
@@ -13,12 +13,12 @@
   },
   "autoload": {
       "psr-4": {
-          "Ja\\Inertia\\": "src"
+          "InertiaKit\\": "src"
       }
   },
   "autoload-dev": {
       "psr-4": {
-          "Ja\\Inertia\\Tests\\": "tests"
+          "InertiaKit\\Tests\\": "tests"
       }
   },
   "config": {
