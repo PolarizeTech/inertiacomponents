@@ -43,7 +43,7 @@ class ShareInertiaData
 
             'permissions' => function () use ($user, $team) {
 
-                if (! $user) return [];
+                if (! $user || ! $team) return [];
 
                 $allPermissions = config('jetstream.permissions', []);
 
