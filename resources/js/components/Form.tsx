@@ -122,6 +122,7 @@ export default function ({
 }
 
 interface ThemeProps {
+  submitButtonText?: string
   submitButton?: Function|boolean
 }
 
@@ -132,6 +133,7 @@ export const FormTheme = ({
   fields = [],
   processing,
   submitButton,
+  submitButtonText = 'Submit',
   tight,
   className,
   children,
@@ -275,7 +277,7 @@ export const FormTheme = ({
           {typeof submitButton === 'function' ? (
             submitButton()
           ) : (
-            <ButtonPrimary type="submit" className="ml-4" disabled={processing} text="Submit" />
+            <ButtonPrimary type="submit" className="ml-4" disabled={processing} text={formSubmitButtonText} />
           )}
         </div>
       )}
