@@ -150,9 +150,11 @@ export const FormTheme = ({
           disabled,
           prepend,
           ...props
-        }) => {
+        }, fieldIndex) => {
 
           props.value = fieldValues[name] || null
+
+          const id = `${name}-${(new Date).getTime() + fieldIndex}`
 
           return (
 
@@ -189,6 +191,7 @@ export const FormTheme = ({
               {type === 'checkbox' && (
 
                 <Checkbox
+                  id={id}
                   name={name}
                   checked={props.value}
                   handleChange={event => handleChange(name, event.target.checked)}

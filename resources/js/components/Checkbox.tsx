@@ -25,14 +25,14 @@ export function Checkbox({
   )
 
   return label ? (
-    <label className="relative flex items-start">
+    <div className="relative flex items-start">
       <div className="flex h-5 items-center">
         <Input />
       </div>
       <div className="ml-3 text-sm">
-        <Label htmlFor={name} value={label} asSpan />
+        <Label htmlFor={name} value={label} />
       </div>
-    </label>
+    </div>
   ) : (
     <Input />
   )
