@@ -18,7 +18,7 @@ export function Checkbox({
       name={name}
       value={value}
       checked={checked}
-      className="rounded border-chrome-300 text-theme-700 shadow-sm focus:border-theme-300 focus:ring focus:ring-theme-200 focus:ring-opacity-50"
+      className="cursor-pointer rounded border-chrome-300 text-theme-700 shadow-sm focus:border-theme-300 focus:ring focus:ring-theme-200 focus:ring-opacity-50"
       onChange={(e) => handleChange(e)}
       {...props}
     />
@@ -30,7 +30,7 @@ export function Checkbox({
         <Input />
       </div>
       <div className="ml-3 text-sm">
-        <Label htmlFor={id || name} value={label} />
+        <Label htmlFor={id || name} value={label} className="cursor-pointer" />
       </div>
     </div>
   ) : (
