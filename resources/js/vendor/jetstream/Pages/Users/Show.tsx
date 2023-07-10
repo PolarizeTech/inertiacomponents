@@ -27,7 +27,7 @@ export default function ({ user }: Props) {
       pageSuperHeading={lang('auth.my_profile')}
       pageHeading={user.name}
       formRoute={route('user-profile-information.update')}
-      formSubmitButtonText={lang('shared.save')}
+      submitButtonText={lang('shared.save')}
       formShowBackButton
       formMethod="PUT"
       formFields={fields}/>
@@ -43,7 +43,7 @@ interface LayoutProps {
   formRoute?: string
   formMethod?: string
   formFields?: string
-  formSubmitButtonText?: string
+  submitButtonText?: string
   formShowBackButton?: string
 }
 
@@ -56,7 +56,7 @@ const Layout = ({
   formRoute,
   formMethod,
   formFields,
-  formSubmitButtonText,
+  submitButtonText,
   formShowBackButton,
   children,
   ...props
@@ -83,7 +83,7 @@ const Layout = ({
           method={formMethod}
           fields={formFields}
           showBackButton={formShowBackButton}
-          formSubmitButtonText={formSubmitButtonText} />
+          submitButtonText={submitButtonText} />
 
       </Card>
 

@@ -277,7 +277,7 @@ export const FormTheme = ({
           {typeof submitButton === 'function' ? (
             submitButton()
           ) : (
-            <ButtonPrimary type="submit" className="ml-4" disabled={processing} text={formSubmitButtonText} />
+            <ButtonPrimary type="submit" className="ml-4" disabled={processing} text={submitButtonText} />
           )}
         </div>
       )}

@@ -20,7 +20,7 @@ export default function ({ status }) {
                 action={'/forgot-password'}
                 method="POST"
                 fields={fields}
-                formSubmitButtonText="Email Password Reset Link"
+                submitButtonText="Email Password Reset Link"
             />
             
         </AuthLayout>

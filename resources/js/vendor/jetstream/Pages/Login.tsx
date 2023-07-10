@@ -24,7 +24,7 @@ export default function ({ alerts, canResetPassword, canRegister }) {
         action={route('login')}
         method="POST"
         fields={fields}
-        formSubmitButtonText={lang('auth.log_in')} />
+        submitButtonText={lang('auth.log_in')} />
 
       <div className="absolute z-20 -mt-8">
         {canResetPassword && (
