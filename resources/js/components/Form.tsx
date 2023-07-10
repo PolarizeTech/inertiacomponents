@@ -233,12 +233,6 @@ export const FormTheme = ({
                   {...props} />
 
               )}
-
-              {type === 'combobox' && (
-
-                <Combobox name={name} handleChange={option => handleChange(name, option.id)} {...props} />
-
-              )}
               
               {type === 'youtube_url' && (props.value || '').includes('youtube.com/embed/') && (
 
