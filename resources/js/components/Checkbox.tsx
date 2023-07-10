@@ -1,6 +1,15 @@
+import React from 'react'
 import { Label } from '.'
 
-export function Checkbox({ label = null, id = null, name, value, checked, handleChange, ...props }) {
+export function Checkbox({
+  label = null,
+  id = null,
+  name,
+  value,
+  checked,
+  handleChange,
+  ...props
+}) {
 
   const Input = () => (
     <input
@@ -16,14 +25,14 @@ export function Checkbox({ label = null, id = null, name, value, checked, handle
   )
 
   return label ? (
-    <div className="relative flex items-start">
+    <label className="relative flex items-start">
       <div className="flex h-5 items-center">
         <Input />
       </div>
       <div className="ml-3 text-sm">
-        <Label htmlFor={name} value={label} />
+        <Label htmlFor={name} value={label} asSpan />
       </div>
-    </div>
+    </label>
   ) : (
     <Input />
   )
