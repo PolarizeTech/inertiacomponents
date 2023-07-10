@@ -30,7 +30,7 @@ export function Checkbox({
         <Input />
       </div>
       <div className="ml-3 text-sm">
-        <Label htmlFor={name} value={label} />
+        <Label htmlFor={id || name} value={label} />
       </div>
     </div>
   ) : (
