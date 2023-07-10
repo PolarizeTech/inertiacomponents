@@ -110,6 +110,7 @@ const Navigation = ({ navigation }) => (
       <Link
         key={item.name}
         href={item.href}
+        external={item.external}
         className={mergeCssClasses(
           item.current && 'bg-chrome-200 text-chrome-700 dark:text-chrome-400 dark:bg-chrome-800',
           !item.current && 'text-chrome-600 hover:text-chrome-700 dark:text-chrome-600 dark:hover:bg-chrome-800 dark:hover:text-chrome-400',

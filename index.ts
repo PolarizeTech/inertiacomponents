@@ -45,7 +45,7 @@ export default (options: JaInertiaOptionsProps) => ({
     }
   
     // Configure dev server (e.g. valet https, HMR, etc.)
-    config = devServerConfig(config, mode)
+    // config = devServerConfig(config, mode)
     
     return config
   }

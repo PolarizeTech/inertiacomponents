@@ -14,6 +14,7 @@ export default function ({
   sidebar = true,
   topbar = false,
   fullWidth = false,
+  fullHeight = false,
   className = '',
   children,
   ...props
@@ -35,7 +36,7 @@ export default function ({
             <AlertMessage alerts={alerts} />
           </div>
 
-          <div className="py-12">
+          <div className={!fullHeight ? 'py-12' : ''}>
             {fullWidth ? children : (
               <Container>
                 {children}

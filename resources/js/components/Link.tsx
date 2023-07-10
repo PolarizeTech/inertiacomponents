@@ -7,6 +7,7 @@ export default ({
   href,
   method,
   children,
+  external,
   ...props
 }: PropsWithChildren<LinkProps>) => {
 
@@ -21,7 +22,7 @@ export default ({
     }
   }
 
-  if (props.target === '_blank') {
+  if (props.target === '_blank' || external) {
     return (
       <a href={href} { ...props }>{children}</a>  
     )
